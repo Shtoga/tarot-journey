@@ -1,0 +1,79 @@
+{
+  "name": "Tarot Journey",
+  "short_name": "TarotJourney",
+  "description": "Ежедневное путешествие по картам Таро. Откройте свою карту-приключение на сегодня.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5e9d4",
+  "theme_color": "#2c1810",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "images/ui/logo-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "images/ui/logo-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "images/ui/logo-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "images/ui/logo-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "images/ui/logo-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "images/ui/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/ui/logo-384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "images/ui/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["lifestyle", "entertainment", "education"],
+  "screenshots": [
+    {
+      "src": "images/ui/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Сегодняшнее путешествие",
+      "short_name": "Сегодня",
+      "description": "Открыть сегодняшний расклад",
+      "url": "/?today",
+      "icons": [{ "src": "images/ui/logo-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Новое путешествие",
+      "short_name": "Новое",
+      "description": "Начать новое путешествие",
+      "url": "/?new",
+      "icons": [{ "src": "images/ui/logo-96.png", "sizes": "96x96" }]
+    }
+  ]
+}

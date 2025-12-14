@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tarot Journey — Картограф своей судьбы</title>
+    <meta name="description" content="Ежедневное путешествие по картам Таро. Откройте свою карту-приключение на сегодня.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="images/ui/favicon.ico">
+    <meta name="theme-color" content="#2c1810">
+    
+    <!-- Шрифты -->
+    <link rel="preload" href="fonts/UnifrakturMaguntia-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="fonts/CormorantGaramond-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="fonts/Quicksand-Regular.ttf" as="font" type="font/ttf" crossorigin>
+</head>
+<body>
+    <!-- Экран загрузки -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="compass-loader">
+                <div class="compass-rose"></div>
+                <div class="compass-needle"></div>
+            </div>
+            <p class="loading-text">Составляем карту судьбы...</p>
+        </div>
+    </div>
+
+    <!-- Главный экран -->
+    <div id="main-screen" class="screen hidden">
+        <header class="header">
+            <div class="logo-container">
+                <h1 class="logo">Tarot Journey</h1>
+                <p class="tagline">Картограф своей судьбы</p>
+            </div>
+            <div class="user-info">
+                <span id="user-coins" class="coins">⚪ 0</span>
+                <button id="menu-btn" class="menu-btn" aria-label="Меню">☰</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Глобус/приветствие -->
+            <section id="welcome-section" class="welcome-section">
+                <div class="globe-container">
+                    <canvas id="globe-canvas" width="300" height="300"></canvas>
+                    <div class="globe-overlay">
+                        <h2 id="daily-location">Сегодняшняя локация</h2>
+                        <p id="location-desc">Загружается...</p>
+                    </div>
+                </div>
+                
+                <div class="cta-container">
+                    <p class="cta-text">Какое приключение ждет вас сегодня?</p>
+                    <div class="button-group">
+                        <button id="buy-single" class="btn btn-primary">
+                            <span class="btn-icon">🗺️</span>
+                            <span class="btn-text">Одно путешествие</span>
+                            <span class="btn-price">99 ₽</span>
+                        </button>
+                        <button id="buy-weekly" class="btn btn-secondary">
+                            <span class="btn-icon">⚡</span>
+                            <span class="btn-text">Пакет "Исследователь"</span>
+                            <span class="btn-subtext">5 путешествий</span>
+                            <span class="btn-price">399 ₽</span>
+                        </button>
+                        <button id="trial-btn" class="btn btn-ghost">
+                            <span class="btn-icon">👁️</span>
+                            <span class="btn-text">Бесплатный предпросмотр</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Экран путешествия -->
+            <section id="journey-screen" class="journey-screen hidden">
+                <div class="journey-header">
+                    <button id="back-to-main" class="back-btn">← Назад</button>
+                    <h2 id="journey-location-name">Лес Сомнений</h2>
+                    <div class="progress-indicator">
+                        <span id="progress-text">0/5</span>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="journey-map-container">
+                    <canvas id="journey-map" width="600" height="800"></canvas>
+                    <div class="map-overlay"></div>
+                </div>
+
+                <div class="hint">Коснитесь темных зон, чтобы открыть карты</div>
+            </section>
+
+            <!-- Экран открытой карты -->
+            <section id="card-reveal-screen" class="card-reveal-screen hidden">
+                <div class="card-reveal-header">
+                    <button id="back-to-map" class="back-btn">← К карте</button>
+                    <h3 id="card-position">Вызов</h3>
+                </div>
+
+                <div class="card-container">
+                    <div class="card-frame">
+                        <div id="card-image" class="card-image">
+                            <!-- Карта будет отрисована здесь -->
+                        </div>
+                        <div class="card-name">
+                            <h4 id="card-name">Сила</h4>
+                            <span id="card-suit" class="card-suit">VIII • Старший Аркан</span>
+                        </div>
+                    </div>
+
+                    <div class="card-interpretation">
+                        <h5>Толкование</h5>
+                        <p id="card-meaning">Внутренняя сила, мягкость, контроль над инстинктами. Вы обладаете мужеством и состраданием, чтобы преодолеть трудности.</p>
+                        <div id="card-reversed" class="reversed hidden">
+                            <strong>Перевернутая:</strong>
+                            <span id="reversed-meaning">Сомнения, слабость, потеря контроля.</span>
+                        </div>
+                    </div>
+
+                    <div class="artifact-section">
+                        <div class="artifact-header">
+                            <span class="artifact-icon">🏆</span>
+                            <h5>Артефакт путешественника</h5>
+                        </div>
+                        <div id="artifact-content" class="artifact-content">
+                            <!-- Артефакт будет загружен здесь -->
+                        </div>
+                    </div>
+                </div>
+
+                <button id="continue-journey" class="btn btn-primary">Продолжить путешествие</button>
+            </section>
+
+            <!-- Экран итоговой карты -->
+            <section id="final-map-screen" class="final-map-screen hidden">
+                <div class="final-header">
+                    <h2>Карта вашего дня</h2>
+                    <p class="date-display" id="final-date"></p>
+                </div>
+
+                <div class="final-map-container">
+                    <canvas id="final-map" width="800" height="800"></canvas>
+                </div>
+
+                <div class="final-actions">
+                    <button id="share-btn" class="btn btn-share">
+                        <span class="btn-icon">📤</span>
+                        Поделиться
+                    </button>
+                    <button id="save-btn" class="btn btn-save">
+                        <span class="btn-icon">💾</span>
+                        Сохранить карту
+                    </button>
+                    <button id="buy-poster" class="btn btn-poster">
+                        <span class="btn-icon">🖼️</span>
+                        Купить постер (199 ₽)
+                    </button>
+                </div>
+
+                <button id="new-journey-btn" class="btn btn-ghost">Новое путешествие</button>
+            </section>
+        </main>
+
+        <!-- Меню -->
+        <div id="side-menu" class="side-menu hidden">
+            <div class="menu-header">
+                <h3>Меню</h3>
+                <button id="close-menu" class="close-menu">×</button>
+            </div>
+            <div class="menu-content">
+                <div class="menu-section">
+                    <h4>Ваши путешествия</h4>
+                    <div id="journey-history" class="journey-history">
+                        <!-- История будет загружена здесь -->
+                    </div>
+                </div>
+                <div class="menu-section">
+                    <h4>Настройки</h4>
+                    <div class="setting-item">
+                        <span>Звуки</span>
+                        <label class="switch">
+                            <input type="checkbox" id="sound-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span>Анимации</span>
+                        <label class="switch">
+                            <input type="checkbox" id="animations-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="menu-section">
+                    <h4>О проекте</h4>
+                    <p class="about-text">
+                        Tarot Journey — это инструмент для самопознания и вдохновения. 
+                        Все предсказания носят развлекательный характер.
+                    </p>
+                    <div class="legal-links">
+                        <a href="#" class="legal-link">Политика конфиденциальности</a>
+                        <a href="#" class="legal-link">Условия использования</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="menu-overlay" class="menu-overlay hidden"></div>
+
+        <!-- Модальное окно оплаты -->
+        <div id="payment-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Начать путешествие</h3>
+                <div id="payment-options" class="payment-options">
+                    <!-- Опции оплаты будут загружены здесь -->
+                </div>
+                <div class="payment-disclaimer">
+                    <p>⚡ Мгновенный доступ после оплаты</p>
+                    <p>📱 Доступно на всех устройствах</p>
+                    <p>🔄 Возврат в течение 14 дней</p>
+                </div>
+                <button id="close-payment" class="btn btn-ghost">Назад</button>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 Tarot Journey. Для развлечения лиц старше 18 лет.</p>
+            <p class="disclaimer">Таро — инструмент для самопознания, а не гадание.</p>
+        </footer>
+    </div>
+
+    <!-- Аудио элементы (скрытые) -->
+    <audio id="click-sound" preload="auto">
+        <source src="audio/click.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="reveal-sound" preload="auto">
+        <source src="audio/reveal.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="success-sound" preload="auto">
+        <source src="audio/success.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Скрипты -->
+    <script src="js/service-worker.js"></script>
+    <script src="js/tarot-deck.js"></script>
+    <script src="js/map-engine.js"></script>
+    <script src="js/payment.js"></script>
+    <script src="js/render-card.js"></script>
+    <!--<script src="js/app.js"></script> -->
+    <!--<script src="js/app-simple.js"></script>-->
+    <!-- В разделе скриптов, перед app-working.js -->
+<script src="js/card-generator.js"></script>
+<script src="js/app-working.js"></script>
+    <script src="js/app-working.js"></script>
+</body>
+</html>
